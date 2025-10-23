@@ -1,12 +1,14 @@
+import httpx
+import logging
+
 class NewsClient:
-    def __init__(self):
+    def __init__(self, api_key: str):
+        self.api_key = api_key
         pass
 
-    def get_headlines(self):
-        return [
-            "Breaking News: Major Event Unfolds",
-            "Sports Update: Local Team Wins Championship",
-            "Weather Alert: Severe Storms Expected Tomorrow",
-            "Technology: New Smartphone Model Released",
-            "Health: Tips for a Balanced Diet"
-        ]
+    async def get_headlines(self):
+        logging.info("Fetching news headlines.")
+        client = httpx.AsyncClient()
+        url = f"https://newsapi.org/v2/top-headlines?language=en&apiKey={self.api_key}"
+        response = await client.get(url)
+        return response.json()
